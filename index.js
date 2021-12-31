@@ -4,10 +4,10 @@ const fsExtra = require('fs-extra')
 const allChars = [...`abcdefghijklmnopqrstuvwxyz,./'`]
 
 const template = `
-Snousch3
-x f h k * * p o u .
-r s n t m w c e i a
-z b l d j y g ' , /
+Insane
+x l d * * * w o u .
+s r t n * * m e i a
+z j * h * * g ' , /
 0 1 2 3 3 4 4 5 6 7
 0 1 2 3 3 4 4 5 6 7
 0 1 2 3 3 4 4 5 6 7
