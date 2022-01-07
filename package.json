@@ -5,12 +5,15 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "col": "node columns.js"
+    "col": "node columns.js",
+    "lay": "node layout.js",
+    "fil": "node files.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "fs-extra": "^10.0.0",
     "graceful-fs": "^4.2.8"
-  }
+  },
+  "devDependencies": {}
 }

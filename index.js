@@ -5,13 +5,21 @@ const allChars = [...`abcdefghijklmnopqrstuvwxyz,./'`]
 
 const template = `
 Insane
-x l d * * * w o u .
-s r t n * * m e i a
-z j * h * * g ' , /
+q l d * * * * o u '
+s r t n g * h e i a
+x j k c * * * , . /
 0 1 2 3 3 4 4 5 6 7
 0 1 2 3 3 4 4 5 6 7
 0 1 2 3 3 4 4 5 6 7
 `
+// q l d p w y f o u '
+// s r t n g m h e i a
+// x j k c b z v , . /
+// 0 1 2 3 3 4 4 5 6 7
+// 0 1 2 3 3 4 4 5 6 7
+// 0 1 2 3 3 4 4 5 6 7
+// `
+// pwyfmbzv
 
 const templateName = template.match(/[a-zA-Z0-9-_.:]+/)[0]
 const folderName = `permutations`

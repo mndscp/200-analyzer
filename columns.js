@@ -1,55 +1,30 @@
 const fs = require('graceful-fs')
 
-const layoutChars = `abcdefghijklmnopqrstuvwxyz,./'`
-const layoutCharsByFrequency = `etaoinsrhldcumfpgywb.v,k'xjqz/`
-const disallowedBigrams = {
-  'a': 'bcdefghijklmnprstuvw',
-  'b': 'aeiour',
-  'c': 'aehiklorsu',
-  'd': 'aegilnoru',
-  'e': 'abcdfghijklmnprstuvwz',
-  'f': 'aeilortu',
-  'g': 'aehilnoru',
-  'h': 'acegiorstuwy',
-  'i': 'abcdefghiklnoprstw',
-  'j': 'aeiou',
-  'k': 'aceilorsu',
-  'l': 'abcdefgikmnoprtuvy',
-  'm': 'abeiloprsu',
-  'n': 'abdegilorstuy',
-  'o': 'bcdfghijklmnprstuvw',
-  'p': 'aeilmorsu',
-  'q': '',
-  'r': 'abcdefghiklmnopstu',
-  's': 'acehilmnoprtuw',
-  't': 'aefhilnorsu',
-  'u': 'abcdefghijklmnoprstwz',
-  'v': 'aelou',
-  'w': 'aehinostu',
-  'x': '',
-  'y': 'bdhlnrt',
-  'z': 'enotuw',
-  ',': '',
-  '.': '',
-  '/': '',
-  '\'': '',
-}
-
-const generateColumnsForChar = ((char1) => {
+const generateColumnsForChar = ((char1, chars, disallowedBigrams) => {
   const columns = []
 
-  for (let i = 0; i < layoutChars.length; i++) {
-    for (let j = 0; j < layoutChars.length; j++) {
+  for (let i = 0; i < chars.length; i++) {
+    for (let j = 0; j < chars.length; j++) {
       let column = char1
 
-      const char2 = layoutChars[i]
-      const char2allowed = char1 !== char2 && !disallowedBigrams[char1].includes(char2)
+      const char2 = chars[i]
+      const char2allowed =
+        char1 !== char2 &&
+        !disallowedBigrams[char1].includes(char2) &&
+        !disallowedBigrams[char2].includes(char1)
+
       if (!char2allowed) continue
 
       column += char2
 
-      const char3 = layoutChars[j]
-      const char3allowed = !column.includes(char3) && !disallowedBigrams[char1].includes(char3) && !disallowedBigrams[char2].includes(char3)
+      const char3 = chars[j]
+      const char3allowed =
+        !column.includes(char3) &&
+        !disallowedBigrams[char1].includes(char3) &&
+        !disallowedBigrams[char3].includes(char1) &&
+        !disallowedBigrams[char2].includes(char3) &&
+        !disallowedBigrams[char3].includes(char2)
+
       if (!char3allowed) continue
 
       column += char3
@@ -61,25 +36,65 @@ const generateColumnsForChar = ((char1) => {
   return columns.sort()
 })
 
-const generateAllColumns = (chars) => {
+const generateAllColumns = (chars, disallowedBigrams) => {
   const columns = []
 
   chars.split('').forEach((char) => {
-    columns.push(generateColumnsForChar(char))
+    columns.push(generateColumnsForChar(char, chars, disallowedBigrams))
   })
 
   return columns.flat()
 }
 
 const writeJson = (name, data) => {
-  fs.writeFile(`${name}.json`, data, (error) => {
+  fs.writeFileSync(`${name}.json`, JSON.stringify(data), (error) => {
     if (error) throw error
   })
 }
 
-const generate = (() => {
-  const columns = [...new Set(generateAllColumns(layoutCharsByFrequency))].sort()
+const getColumns = () => {
+  // const layoutChars = `abcdefghijklmnopqrstuvwxyz,./'`
+  const layoutChars = `bcdfghjklmnpqrstvwxyz`
+  const disallowedBigrams = {
+    'a': 'bcdefghijklmnprstuvw',
+    'b': 'aeilour',
+    'c': 'aehiklorsu',
+    'd': 'aeilnoru',
+    'e': 'abcdfghijklmnprstuvwz',
+    'f': 'aeiloru',
+    'g': 'aehilnoru',
+    'h': 'acegiorstuwy',
+    'i': 'abcdefghklmnoprstw',
+    'j': 'aeiou',
+    'k': 'aceilorsu',
+    'l': 'abcdefgikopstuvy',
+    'm': 'aeiorsu',
+    'n': 'adegiorstu',
+    'o': 'bcdfghijklmnprstuvw',
+    'p': 'aeilorsu',
+    'q': '',
+    'r': 'abcdefghikmnopstuvwz',
+    's': 'acehilmnoprtuw',
+    't': 'aehilnorsu',
+    'u': 'abcdefghjklmnoprstwz',
+    'v': 'aeloru',
+    'w': 'aehinorsu',
+    'x': '',
+    'y': 'bdhlrt',
+    'z': 'enoru',
+    ',': '',
+    '.': '',
+    '/': '',
+    '\'': '',
+  }
 
-  writeJson('columns', JSON.stringify(columns))
-  console.table(columns)
-})()
+  const columns = [...new Set(generateAllColumns(layoutChars, disallowedBigrams))].sort()
+
+  writeJson('columns', columns)
+  // console.log(columns)
+  return columns
+}
+
+module.exports = { getColumns }
+
+getColumns()
