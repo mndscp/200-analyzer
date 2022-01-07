@@ -1,40 +1,6 @@
 'use strict'
 
 const fs = require('graceful-fs')
-// const allColumns = require('./columns.json')
-
-const disallowedBigrams = {
-  'a': 'bcdefghijklmnprstuvw',
-  'b': 'aeilour',
-  'c': 'aehiklorsu',
-  'd': 'aeilnoru',
-  'e': 'abcdfghijklmnprstuvwz',
-  'f': 'aeiloru',
-  'g': 'aehilnoru',
-  'h': 'acegiorstuwy',
-  'i': 'abcdefghklmnoprstw',
-  'j': 'aeiou',
-  'k': 'aceilorsu',
-  'l': 'abcdefgikopstuvy',
-  'm': 'aeiorsu',
-  'n': 'adegiorstu',
-  'o': 'bcdfghijklmnprstuvw',
-  'p': 'aeilorsu',
-  'q': '',
-  'r': 'abcdefghikmnopstuvwz',
-  's': 'acehilmnoprtuw',
-  't': 'aehilnorsu',
-  'u': 'abcdefghjklmnoprstwz',
-  'v': 'aeloru',
-  'w': 'aehinorsu',
-  'x': '',
-  'y': 'bdhlrt',
-  'z': 'enoru',
-  ',': '',
-  '.': '',
-  '/': '',
-  '\'': '',
-}
 
 let once = true
 
@@ -48,6 +14,7 @@ const writeJson = (name, data) => {
 
 const columns = require('./columns.js')
 const allColumns = columns.getColumns()
+const disallowedBigrams = columns.disallowedBigrams
 const testCols = allColumns
   // .slice(0, 800)
 
@@ -62,7 +29,7 @@ const fails = {
   col7: 0,
   col8: 0,
   col9: 0,
-  col10: 0,
+  // col10: 0,
 }
 
 let survivingLayouts = []
@@ -208,38 +175,40 @@ let survivingLayouts = []
                                 } else {
                                   // col10
 
-                                  const col4to9 = col4to8 + col9
+                                  // const col4to9 = col4to8 + col9
 
-                                  for (let r = 0; r < testCols.length; r++) {
-                                    const col10 = testCols[r]
-                                    const col10ok =
-                                    String([...new Set([...col4to9, ...col10])].sort()) === String([...col4to9, ...col10].sort()) &&
-                                      !col10.includes('l') &&
-                                      !col10.includes('n') &&
-                                      !col10.includes('d') &&
-                                      !col10.includes('f') &&
-                                      !col10.includes('v') &&
-                                      !col10.includes('w') &&
-                                      !col10.includes('k') &&
-                                      !col10.includes('h') &&
-                                      !col10.includes('b') &&
-                                      !col10.includes('g') &&
-                                      !col10.includes('m') &&
-                                      !col10.includes('j') &&
-                                      !col10.includes('c') &&
-                                      !col10.includes('p')
+                                  // for (let r = 0; r < testCols.length; r++) {
+                                    // const col10 = testCols[r]
+                                    const col10 = 'xsz'
+                                    // const col10ok =
+                                    // String([...new Set([...col4to9, ...col10])].sort()) === String([...col4to9, ...col10].sort()) &&
+                                    //   !col10.includes('l') &&
+                                    //   !col10.includes('n') &&
+                                    //   !col10.includes('d') &&
+                                    //   !col10.includes('f') &&
+                                    //   !col10.includes('y') &&
+                                    //   !col10.includes('v') &&
+                                    //   !col10.includes('w') &&
+                                    //   !col10.includes('k') &&
+                                    //   !col10.includes('h') &&
+                                    //   !col10.includes('b') &&
+                                    //   !col10.includes('g') &&
+                                    //   !col10.includes('m') &&
+                                    //   !col10.includes('j') &&
+                                    //   !col10.includes('c') &&
+                                    //   !col10.includes('p')
 
-                                    if (!col10ok) {
-                                      fails.col10++
-                                      failCount++
-                                      all++
-                                    } else {
+                                    // if (!col10ok) {
+                                    //   fails.col10++
+                                    //   failCount++
+                                    //   all++
+                                    // } else {
                                       const layout = [col1, col2, col3, col4, col5, col6, col7, col8, col9, col10]
                                       success++
                                       every++
                                       const timeDifference = new Date() - startTime
 
-                                      if (every > 1) {
+                                      if (every > 99) {
                                         console.clear()
                                         console.log(' ')
                                         console.log('Latest layout:', layout.join(''))
@@ -268,8 +237,8 @@ let survivingLayouts = []
                                         writeJson(`survivingLayouts-${Math.round(success / 10000)}`, survivingLayouts)
                                         // once = false
                                       // }
-                                    }
-                                  }
+                                    // }
+                                  // }
                                 }
                               }
                             }

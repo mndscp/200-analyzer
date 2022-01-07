@@ -52,41 +52,42 @@ const writeJson = (name, data) => {
   })
 }
 
+const disallowedBigrams = {
+  'a': 'bcdefghijklmnprstuvw',
+  'b': 'aeilour',
+  'c': 'aehiklorsu',
+  'd': 'aeilnoru',
+  'e': 'abcdfghijklmnprstuvwz',
+  'f': 'aeiloru',
+  'g': 'aehilnoru',
+  'h': 'acegiorstuwy',
+  'i': 'abcdefghklmnoprstw',
+  'j': 'aeiou',
+  'k': 'aceilorsu',
+  'l': 'abcdefgikopstuvy',
+  'm': 'aeiorsu',
+  'n': 'adegiorstu',
+  'o': 'bcdfghijklmnprstuvw',
+  'p': 'aeilorsu',
+  'q': '',
+  'r': 'abcdefghikmnopstuvwz',
+  's': 'acehilmnoprtuw',
+  't': 'aehilnorsu',
+  'u': 'abcdefghjklmnoprstwz',
+  'v': 'aeloru',
+  'w': 'aehinorsu',
+  'x': '',
+  'y': 'bdhlrt',
+  'z': 'enoru',
+  ',': '',
+  '.': '',
+  '/': '',
+  '\'': '',
+}
+
 const getColumns = () => {
   // const layoutChars = `abcdefghijklmnopqrstuvwxyz,./'`
-  const layoutChars = `bcdfghjklmnpqrstvwxyz`
-  const disallowedBigrams = {
-    'a': 'bcdefghijklmnprstuvw',
-    'b': 'aeilour',
-    'c': 'aehiklorsu',
-    'd': 'aeilnoru',
-    'e': 'abcdfghijklmnprstuvwz',
-    'f': 'aeiloru',
-    'g': 'aehilnoru',
-    'h': 'acegiorstuwy',
-    'i': 'abcdefghklmnoprstw',
-    'j': 'aeiou',
-    'k': 'aceilorsu',
-    'l': 'abcdefgikopstuvy',
-    'm': 'aeiorsu',
-    'n': 'adegiorstu',
-    'o': 'bcdfghijklmnprstuvw',
-    'p': 'aeilorsu',
-    'q': '',
-    'r': 'abcdefghikmnopstuvwz',
-    's': 'acehilmnoprtuw',
-    't': 'aehilnorsu',
-    'u': 'abcdefghjklmnoprstwz',
-    'v': 'aeloru',
-    'w': 'aehinorsu',
-    'x': '',
-    'y': 'bdhlrt',
-    'z': 'enoru',
-    ',': '',
-    '.': '',
-    '/': '',
-    '\'': '',
-  }
+  const layoutChars = `bcdfghjklmnpqrtvwy`
 
   const columns = [...new Set(generateAllColumns(layoutChars, disallowedBigrams))].sort()
 
@@ -95,6 +96,6 @@ const getColumns = () => {
   return columns
 }
 
-module.exports = { getColumns }
+module.exports = { getColumns, disallowedBigrams }
 
-getColumns()
+// getColumns()
