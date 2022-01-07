@@ -23,6 +23,7 @@ let success = 0
 let all = 0
 const startTime = new Date()
 let failCount = 0
+let progress
 const fails = {
   col5: 0,
   col6: 0,
@@ -64,6 +65,7 @@ let survivingLayouts = []
 
           for (let l = 0; l < testCols.length; l++) {
             const col4 = testCols[l]
+            progress = Math.round(testCols.findIndex((i) => i === col4) / testCols.length) + '%'
             // const col4ok = ![...col4].some((char) => col4to3.includes(char))
 
             // if (col4ok) {
@@ -167,11 +169,11 @@ let survivingLayouts = []
                               for (let q = 0; q < testCols.length; q++) {
                                 const col9 = testCols[q]
                                 const col9ok = String([...new Set([...col4to8, ...col9])].sort()) === String([...col4to8, ...col9].sort())
+                                all++
 
                                 if (!col9ok) {
                                   fails.col9++
                                   failCount++
-                                  all++
                                 } else {
                                   // col10
 
@@ -211,11 +213,12 @@ let survivingLayouts = []
                                       if (every > 99) {
                                         console.clear()
                                         console.log(' ')
-                                        console.log('Latest layout:', layout.join(''))
-                                        console.log('Layouts tried:', all)
+                                        console.log('Latest layout:', layout.join(' '))
                                         console.log('Layouts found:', survivingLayouts.length)
                                         console.log('Minutes elapsed:', Math.round(timeDifference / 1000 / 60))
+                                        console.log('Progress:', progress)
                                         console.log('Layouts per second:', Math.round(all / (timeDifference / 1000)))
+                                        console.log('Layouts tried:', all)
                                         console.log('Failed tries:', failCount)
                                         console.log('Fails per column:')
                                         console.table(fails)
@@ -234,7 +237,7 @@ let survivingLayouts = []
                                       // if (once) {
                                         // console.log({survivingLayouts})
                                         // writeJson(`layout-${success}`, [col1, col2, col3, col4, col5, col6, col7, col8, col9, col10])
-                                        writeJson(`survivingLayouts-${Math.round(success / 10000)}`, survivingLayouts)
+                                        writeJson(`survivingLayouts-${Math.round(success / 100000)}`, survivingLayouts)
                                         // once = false
                                       // }
                                     // }
