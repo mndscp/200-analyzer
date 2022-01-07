@@ -5,31 +5,31 @@ const fs = require('graceful-fs')
 
 const disallowedBigrams = {
   'a': 'bcdefghijklmnprstuvw',
-  'b': 'aeilmour',
+  'b': 'aeilour',
   'c': 'aehiklorsu',
-  'd': 'aegilnoru',
+  'd': 'aeilnoru',
   'e': 'abcdfghijklmnprstuvwz',
-  'f': 'aeilortu',
+  'f': 'aeiloru',
   'g': 'aehilnoru',
   'h': 'acegiorstuwy',
-  'i': 'abcdefghiklnoprstw',
+  'i': 'abcdefghklmnoprstw',
   'j': 'aeiou',
   'k': 'aceilorsu',
-  'l': 'abcdefgikmnoptuvy',
-  'm': 'abeiloprsu',
-  'n': 'abdegilorstuy',
+  'l': 'abcdefgikopstuvy',
+  'm': 'aeiorsu',
+  'n': 'adegiorstu',
   'o': 'bcdfghijklmnprstuvw',
-  'p': 'aeilmorsu',
+  'p': 'aeilorsu',
   'q': '',
-  'r': 'abcdefghikmnopstu',
+  'r': 'abcdefghikmnopstuvwz',
   's': 'acehilmnoprtuw',
-  't': 'aefhilnorsu',
+  't': 'aehilnorsu',
   'u': 'abcdefghjklmnoprstwz',
-  'v': 'aelou',
-  'w': 'aehinostu',
+  'v': 'aeloru',
+  'w': 'aehinorsu',
   'x': '',
-  'y': 'bdhlnrt',
-  'z': 'enotuw',
+  'y': 'bdhlrt',
+  'z': 'enoru',
   ',': '',
   '.': '',
   '/': '',
@@ -53,6 +53,9 @@ const testCols = allColumns
 
 let every = 0
 let success = 0
+let all = 0
+const startTime = new Date()
+let failCount = 0
 const fails = {
   col5: 0,
   col6: 0,
@@ -128,6 +131,8 @@ let survivingLayouts = []
 
                 if (!col5ok) {
                   fails.col5++
+                  failCount++
+                  all++
                 } else {
                   // col6
 
@@ -140,6 +145,8 @@ let survivingLayouts = []
 
                     if (!col6ok) {
                       fails.col6++
+                      failCount++
+                      all++
                     } else {
                       // col7
 
@@ -170,6 +177,8 @@ let survivingLayouts = []
 
                           if (!col7ok) {
                             fails.col7++
+                            failCount++
+                            all++
                           } else {
                           // col8
 
@@ -181,6 +190,8 @@ let survivingLayouts = []
 
                             if (!col8ok) {
                               fails.col8++
+                              failCount++
+                              all++
                             } else {
                               // col9
 
@@ -192,6 +203,8 @@ let survivingLayouts = []
 
                                 if (!col9ok) {
                                   fails.col9++
+                                  failCount++
+                                  all++
                                 } else {
                                   // col10
 
@@ -201,7 +214,6 @@ let survivingLayouts = []
                                     const col10 = testCols[r]
                                     const col10ok =
                                     String([...new Set([...col4to9, ...col10])].sort()) === String([...col4to9, ...col10].sort()) &&
-                                      !col10.includes('y') &&
                                       !col10.includes('l') &&
                                       !col10.includes('n') &&
                                       !col10.includes('d') &&
@@ -219,19 +231,33 @@ let survivingLayouts = []
 
                                     if (!col10ok) {
                                       fails.col10++
+                                      failCount++
+                                      all++
                                     } else {
                                       const layout = [col1, col2, col3, col4, col5, col6, col7, col8, col9, col10]
                                       success++
                                       every++
+                                      const timeDifference = new Date() - startTime
 
-                                      if (every > 3) {
-console.log(`------------------------
-
-Latest layout:
-${layout.join('')}
-
-Fails:`)
+                                      if (every > 1) {
+                                        console.clear()
+                                        console.log(' ')
+                                        console.log('Latest layout:', layout.join(''))
+                                        console.log('Layouts tried:', all)
+                                        console.log('Layouts found:', survivingLayouts.length)
+                                        console.log('Minutes elapsed:', Math.round(timeDifference / 1000 / 60))
+                                        console.log('Layouts per second:', Math.round(all / (timeDifference / 1000)))
+                                        console.log('Failed tries:', failCount)
+                                        console.log('Fails per column:')
                                         console.table(fails)
+// console.log(`
+// Latest layout: ${layout.join('')}
+// Layouts tried: ${all}
+// Layouts found: ${survivingLayouts.length}
+// Time elapsed: ${Math.round(timeDifference / 1000 / 60)}m
+// Layouts per second: ${Math.round(all / (timeDifference / 1000))}
+// Fails:`)
+//                                         console.table(fails)
                                         every = 0
                                       }
 
