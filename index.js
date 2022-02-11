@@ -4,22 +4,14 @@ const fsExtra = require('fs-extra')
 const allChars = [...`abcdefghijklmnopqrstuvwxyz,./'`]
 
 const template = `
-Insane
-q l d * * * * o u '
-s r t n g * h e i a
-x j k c * * * , . /
+crst
+q l * * * * f o u '
+c r s t g * n e i a
+z x w d v j h / , .
 0 1 2 3 3 4 4 5 6 7
 0 1 2 3 3 4 4 5 6 7
 0 1 2 3 3 4 4 5 6 7
 `
-// q l d p w y f o u '
-// s r t n g m h e i a
-// x j k c b z v , . /
-// 0 1 2 3 3 4 4 5 6 7
-// 0 1 2 3 3 4 4 5 6 7
-// 0 1 2 3 3 4 4 5 6 7
-// `
-// pwyfmbzv
 
 const templateName = template.match(/[a-zA-Z0-9-_.:]+/)[0]
 const folderName = `permutations`

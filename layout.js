@@ -18,7 +18,7 @@ const disallowedBigrams = columns.disallowedBigrams
 const testCols = allColumns
   // .slice(0, 800)
 
-let every = 0
+let every = 1
 let success = 0
 let all = 0
 const startTime = new Date()
@@ -79,6 +79,10 @@ let survivingLayouts = []
                 // const col5ok =
                 //   ![...col5].some((char) => col4to4.includes(char)) &&
                 const col5ok = String([...new Set([...col4to4, ...col5])].sort()) === String([...col4to4, ...col5].sort()) &&
+                  !col5.includes('r') &&
+                  !col5.includes('s') &&
+                  !col5.includes('n') &&
+                  !col5.includes('t') &&
                   !disallowedBigrams[col4[0]].includes(col5[0]) &&
                   !disallowedBigrams[col4[0]].includes(col5[1]) &&
                   !disallowedBigrams[col4[0]].includes(col5[2]) &&
@@ -110,7 +114,11 @@ let survivingLayouts = []
                   for (let n = 0; n < testCols.length; n++) {
                     const col6 = testCols[n]
                     // const col6ok = ![...col6].some((char) => col4to5.includes(char))
-                    const col6ok = String([...new Set([...col4to5, ...col6])].sort()) === String([...col4to5, ...col6].sort())
+                    const col6ok = String([...new Set([...col4to5, ...col6])].sort()) === String([...col4to5, ...col6].sort()) &&
+                    !col6.includes('r') &&
+                    !col6.includes('s') &&
+                    !col6.includes('n') &&
+                    !col6.includes('t')
 
                     if (!col6ok) {
                       fails.col6++
@@ -210,7 +218,7 @@ let survivingLayouts = []
                                       every++
                                       const timeDifference = new Date() - startTime
 
-                                      if (every > 99) {
+                                      if (every > 87) {
                                         console.clear()
                                         console.log(' ')
                                         console.log('Latest layout:', layout.join(' '))
