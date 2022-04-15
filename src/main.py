@@ -10,7 +10,7 @@ JSON = Dict[str, any]
 
 
 def init_config():
-    
+
     if os.path.isfile('init-config.json'):
         config = json.load(open('init-config.json', 'r'))
     else:
@@ -69,7 +69,7 @@ def get_results(config: JSON):
 
     if os.path.isfile(cachefile):
         cache = json.load(open(cachefile, 'r'))
-    else:   
+    else:
         cache = {
             'file': config['datafile'],
             'data': {}
@@ -105,14 +105,14 @@ def get_results(config: JSON):
             cache['data'][item['name']][config['thumb-space']] = analyzer.get_results(keys, data, config)
 
         item['metrics'] = cache['data'][item['name']][config['thumb-space']]
-    
+
         results['data'].append(item)
-        
+
     sort_results(results, config)
 
     # write cache
     with open(cachefile, 'w') as f:
-        f.write(json.dumps(cache, indent=4)) 
+        f.write(json.dumps(cache, indent=4))
 
     return results
 
@@ -151,7 +151,7 @@ def show_results(results: JSON, config: JSON):
     print("sort by:", end='   ')
     for sort in config['sort']:
         print(
-            sort, 
+            sort,
             "{:.0%}".format(config['sort'][sort]),
             end='   '
         )
@@ -187,7 +187,7 @@ def show_results(results: JSON, config: JSON):
         if item['name'].lower() not in config['layouts']:
             config['layouts'][item['name'].lower()] = True
 
-        # ignore hidden layouts 
+        # ignore hidden layouts
         if not config['layouts'][item['name'].lower()]:
             continue
 
@@ -211,7 +211,7 @@ def print_layout(results: JSON, config: JSON):
     print(("thumb: " + config['thumb-space']).ljust(22, ' '))
 
     for item in [item for item in results['data'] if config['layouts'][item['name'].lower()] == True]:
-        
+
         print()
 
         # header
@@ -219,8 +219,8 @@ def print_layout(results: JSON, config: JSON):
         layout.pretty_print(item['file'], config)
         print()
 
-        print('Trigrams')
-        print('========')
+        # print('Trigrams')
+        # print('========')
 
         # alternation
         print('Alternates -'.rjust(12, ' '), end=' ')
@@ -259,35 +259,36 @@ def print_layout(results: JSON, config: JSON):
         print()
 
         # unknown
-        if item['metrics']['unknown'] > 0:
-            print('Unknown -'.rjust(12, ' '), end=' ')
-            print('Total:', end=' ')
-            print_color(item, 'unknown', results, config)
-            print()
+        # if item['metrics']['unknown'] > 0:
+        #     print('Unknown -'.rjust(12, ' '), end=' ')
+        #     print('Total:', end=' ')
+        #     print_color(item, 'unknown', results, config)
+        #     print()
 
-        print()
+        # print()
 
         # sfb/dsfb/sfT/sfR
-        print('Same Finger')
-        print('===========')
+        # print('Same Finger')
+        # print('===========')
 
         print('SFB -'.rjust(12, ' '), end='')
         print_color(item, 'sfb', results, config)
+        print()
         print('DSFB -'.rjust(12, ' '), end='')
         print_color(item, 'dsfb', results, config)
         print()
 
-        print('SFT -'.rjust(12, ' '), end='')
-        print_color(item, 'sfT', results, config)
-        print('SFR -'.rjust(12, ' '), end='')
-        print_color(item, 'sfR', results, config)
-        print()
+        # print('SFT -'.rjust(12, ' '), end='')
+        # print_color(item, 'sfT', results, config)
+        # print('SFR -'.rjust(12, ' '), end='')
+        # print_color(item, 'sfR', results, config)
+        # print()
 
-        print()
+        # print()
 
         # finger use
-        print("Finger Use")
-        print("==========")
+        # print("Finger Use")
+        # print("==========")
 
         print('Left -'.rjust(12, ' '), end=' ')
         print('Total:', end=' ')
@@ -305,21 +306,21 @@ def print_layout(results: JSON, config: JSON):
             print_color(item, finger, results, config)
         print()
 
-        if (config['thumb-space'] != 'NONE'):
-            print('Thumb -'.rjust(12, ' '), end=' ')
-            print('Total:', end=' ')
-            print_color(item, 'TB', results, config)
-            print()
+        # if (config['thumb-space'] != 'NONE'):
+        #     print('Thumb -'.rjust(12, ' '), end=' ')
+        #     print('Total:', end=' ')
+        #     print_color(item, 'TB', results, config)
+        #     print()
 
-        print()
+        # print()
 
-        # row use
-        print("Row Use")
-        print("=======")
+        # # row use
+        # print("Row Use")
+        # print("=======")
 
         print('Top -'.rjust(12, ' '), end=' ')
         print_color(item, 'top', results, config)
-        print('Home -'.rjust(12, ' '), end=' ')
+        print('Home -'.rjust(13, ' '), end=' ')
         print_color(item, 'home', results, config)
         print('Bottom -'.rjust(12, ' '), end=' ')
         print_color(item, 'bottom', results, config)
@@ -337,7 +338,7 @@ def flatten(section: JSON):
             res.update(flatten(section[item]))
 
     return res
-        
+
 
 def get_states(section: JSON):
 
@@ -360,7 +361,7 @@ def find_section(section: JSON, target: str):
     for item in section:
         if item == target:
             matches.append(section)
-        
+
         matches += find_section(section[item], target)
 
     return matches
@@ -398,7 +399,7 @@ def parse_args(name='', action=None, *args):
                 axis = 'columns'
             elif args[0] in ['layout', 'l']:
                 axis = 'layouts'
-            targets = args[1:] 
+            targets = args[1:]
         else:
             if action == 'tc':
                 axis = 'columns'
@@ -454,7 +455,7 @@ def parse_args(name='', action=None, *args):
             percent_left = (100 - total_percent) / count
         else:
             percent_left = 0
-        
+
         # allocate percents and convert to float
         for item in config['sort']:
             if config['sort'][item] in ['', '-']:
@@ -474,12 +475,12 @@ def parse_args(name='', action=None, *args):
             config['filter'] = {}
 
     elif action in ['thumb', 'tb']:
-        
+
         if args[0].upper() in ['LT', 'RT', 'NONE', 'AVG']:
             config['thumb-space'] = args[0].upper()
 
     elif action in ['data', 'dt']:
-        
+
         if os.path.isfile(os.path.join(config['datadir'], args[0] + '.json')):
             config['datafile'] = args[0]
 
@@ -489,7 +490,7 @@ def parse_args(name='', action=None, *args):
             config['theme'] = args[0]
 
     elif action in ['reset']:
-    
+
         config = init_config()
 
     elif action in ['config', 'cs', 'cl']:
@@ -526,8 +527,11 @@ def parse_args(name='', action=None, *args):
 
         shutil.rmtree(config['cachedir'])
 
+    # elif action in ['perm', 'pm']:
+
+
     elif action in ['help', 'hp', 'h', '?']:
-        
+
         config['single-mode']['active'] = False
 
         args_help = json.load(open('src/static/args-help.json', 'r'))
@@ -562,7 +566,7 @@ if __name__ == "__main__":
 
         for layout_name in layout_config['single-mode']['layouts']:
             layout_config['layouts'][layout_name] = True
-    
+
         results = get_results(layout_config)
         print_layout(results, layout_config)
     else:
